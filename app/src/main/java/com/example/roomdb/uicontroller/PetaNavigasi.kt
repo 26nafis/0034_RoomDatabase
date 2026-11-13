@@ -42,7 +42,14 @@ fun SiswaTopAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back)
+                    )
+                }
+            }
         }
     )
 }
