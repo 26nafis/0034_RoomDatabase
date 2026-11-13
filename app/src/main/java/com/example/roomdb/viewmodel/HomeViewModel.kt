@@ -18,4 +18,11 @@ class HomeViewModel(
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
+    val homeUiState: StateFlow<HomeUiState> =
+        repositoriSiswa
+            .getAllSiswaStream()
+            .filterNotNull()
 
+
+
+}
