@@ -22,7 +22,18 @@ class HomeViewModel(
         repositoriSiswa
             .getAllSiswaStream()
             .filterNotNull()
+            .map {
+                HomeUiState(listSiswa = it.toList())
+            }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(
+                    TIMEOUT_MILLIS
+                ),
+                initialValue = HomeUiState()
+            )
 
-
-
+    data class HomeUiState(
+        val listSiswa: List<Siswa> = listOf()
+    )
 }
