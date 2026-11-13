@@ -39,7 +39,11 @@ fun SiswaTopAppBar(
         title = {
             Text(title)
         },
+        modifier = modifier,
+        scrollBehavior = scrollBehavior,
+        navigationIcon = {
 
+        }
     )
 }
 
