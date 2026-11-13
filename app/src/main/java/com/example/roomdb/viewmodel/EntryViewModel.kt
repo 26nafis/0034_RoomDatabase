@@ -26,7 +26,11 @@ class EntryViewModel(
         )
     }
 
-
+    suspend fun saveSiswa() {
+        if (validasiInput()) {
+            repositoriSiswa.insertSiswa(uiStateSiswa.detailSiswa.toSiswa())
+        }
+    }
 }
 
 
