@@ -4,4 +4,12 @@ import android.app.Application
 import com.example.roomdb.repositori.ContainerApp
 import com.example.roomdb.repositori.ContainerDataApp
 
-class AplikasiSiswa : Application() {}
+class AplikasiSiswa : Application() {
+    lateinit var container: ContainerApp
+        private set
+
+    override fun onCreate() {
+        super.onCreate()
+        container = ContainerDataApp(this)
+    }
+}
