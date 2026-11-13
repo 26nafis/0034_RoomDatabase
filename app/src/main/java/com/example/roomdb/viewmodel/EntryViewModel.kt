@@ -33,7 +33,10 @@ class EntryViewModel(
     }
 }
 
-
+data class UIStateSiswa(
+    val detailSiswa: DetailSiswa = DetailSiswa(),
+    val isEntryValid: Boolean = false
+)
 
 
 
