@@ -64,7 +64,13 @@ fun HostNavigasi(
         startDestination = DestinasiHome.route,
         modifier = modifier
     ) {
-        composable(DestinasiHome.route)
+        composable(DestinasiHome.route) {
+            HomeScreen(
+                navigateToItemEntry = {
+                    navController.navigate(DestinasiEntry.route)
+                }
+            )
+        }
 
     }
 }
