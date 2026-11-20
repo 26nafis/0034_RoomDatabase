@@ -5,11 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomdb.repositori.RepositoriSiswa
 import com.example.roomdb.uicontroller.DestinasiEntry
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class DetailViewModel(
     savedStateHandle: SavedStateHandle,
@@ -17,22 +16,27 @@ class DetailViewModel(
 ) : ViewModel() {
     private val idSiswa: Int = checkNotNull(savedStateHandle[DestinasiEntry.itemIdArg])
 
-    val uiStateSiswa: StateFlow<DetailSiswaUiState> =
-        repositoriSiswa.getSiswaStream(idSiswa)
-            .filterNotNull()
-            .map { DetailSiswaUiState(it.toDetailSiswa()) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = DetailSiswaUiState()
-            )
+    private val _uiStateSiswa = MutableStateFlow(DetailSiswaUiState())
+    val uiStateSiswa: StateFlow<DetailSiswaUiState> = _uiStateSiswa.asStateFlow()
 
-    suspend fun deleteSiswa() {
-        repositoriSiswa.deleteSiswa(uiStateSiswa.value.detailSiswa.toSiswa())
+    init {
+        viewModelScope.launch {
+            repositoriSiswa.getSiswaStream(idSiswa).collect { siswa ->
+                if (siswa != null) _uiStateSiswa.value = DetailSiswaUiState(siswa.toDetailSiswa())
+            }
+        }
     }
 
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
+    fun updateUiState(detailSiswa: DetailSiswa) {
+        _uiStateSiswa.value = DetailSiswaUiState(detailSiswa)
+    }
+
+    suspend fun updateSiswa() {
+        repositoriSiswa.updateSiswa(_uiStateSiswa.value.detailSiswa.toSiswa())
+    }
+
+    suspend fun deleteSiswa() {
+        repositoriSiswa.deleteSiswa(_uiStateSiswa.value.detailSiswa.toSiswa())
     }
 }
 
