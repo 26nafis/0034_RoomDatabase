@@ -27,7 +27,9 @@ class DetailViewModel(
                 initialValue = DetailSiswaUiState()
             )
 
-
+    suspend fun deleteSiswa() {
+        repositoriSiswa.deleteSiswa(uiStateSiswa.value.detailSiswa.toSiswa())
+    }
 
 
 }
