@@ -1,5 +1,6 @@
 package com.example.roomdb.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.roomdb.R
 import com.example.roomdb.room.Siswa
-import com.example.roomdb.uicontroller.DestinasiHome
+import com.example.roomdb.view.route.DestinasiHome
 import com.example.roomdb.uicontroller.SiswaTopAppBar
 import com.example.roomdb.viewmodel.HomeViewModel
 import com.example.roomdb.viewmodel.PenyediaViewModel
@@ -43,6 +44,7 @@ import com.example.roomdb.viewmodel.PenyediaViewModel
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
+    navigateToItemDetail: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(
         factory = PenyediaViewModel.Factory
@@ -83,6 +85,7 @@ fun HomeScreen(
 
         BodyHome(
             itemSiswa = uiStateSiswa.listSiswa,
+            onItemClick = navigateToItemDetail,
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
@@ -93,6 +96,7 @@ fun HomeScreen(
 @Composable
 fun BodyHome(
     itemSiswa: List<Siswa>,
+    onItemClick: (Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -108,6 +112,7 @@ fun BodyHome(
         } else {
             ListSiswa(
                 itemSiswa = itemSiswa,
+                onItemClick = onItemClick,
                 modifier = Modifier.padding(
                     horizontal = dimensionResource(
                         id = R.dimen.padding_small
@@ -121,15 +126,17 @@ fun BodyHome(
 @Composable
 fun ListSiswa(
     itemSiswa: List<Siswa>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (Int) -> Unit = {}
 ) {
-    LazyColumn(modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
         items(
             items = itemSiswa,
             key = { it.id }
         ) { person ->
             DataSiswa(
                 siswa = person,
+                onClick = { onItemClick(person.id) },
                 modifier = Modifier.padding(
                     dimensionResource(id = R.dimen.padding_small)
                 )
@@ -141,10 +148,11 @@ fun ListSiswa(
 @Composable
 fun DataSiswa(
     siswa: Siswa,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
         )
