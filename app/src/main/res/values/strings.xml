@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">roomDB</string>
     <string name="entry_siswa">Tambah Siswa</string>
+    <string name="detail_siswa">Detail Siswa</string>
+    <string name="edit_siswa">Edit Siswa</string>
     <string name="deskripsi_no_item">Belum ada data siswa.</string>
     <string name="back">Kembali</string>
     <string name="btn_submit">Simpan</string>
